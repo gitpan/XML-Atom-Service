@@ -9,7 +9,7 @@ use XML::Atom::Workspace;
 use XML::Atom::Collection;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.0.2');
+use version; our $VERSION = qv('0.10.1');
 
 sub element_name { 'service' }
 

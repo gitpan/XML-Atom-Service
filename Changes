@@ -1,8 +1,9 @@
 2007-02-13  Takeru INOUE  <takeru.inoue at gmail.com>
 
-	* release 0.0.2: updated by using Module::Starter
-	* added use warnings; use Carp;
-        * added POD tests
+	* release 0.10.1 (0.010001): updated by Module::Starter
+	* write README
+	* add use warnings; use Carp;
+        * add POD tests
 
 2007-02-12  Takeru INOUE  <takeru.inoue at gmail.com>
 	* release 0.01: created by h2xs 1.23 with options
