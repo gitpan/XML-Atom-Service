@@ -1,7 +1,6 @@
-# $Id$
-
 use strict;
 use warnings;
+use Carp;
 use Test::More 'no_plan';
 use XML::Atom::Collection;
 use XML::Atom::Categories;

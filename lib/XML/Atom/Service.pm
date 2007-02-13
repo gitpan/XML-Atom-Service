@@ -1,14 +1,15 @@
-# $Id$
-
 package XML::Atom::Service;
+
+use warnings;
 use strict;
+use Carp;
 
 use XML::Atom;
-use base qw( XML::Atom::Thing );
 use XML::Atom::Workspace;
 use XML::Atom::Collection;
+use base qw( XML::Atom::Thing );
 
-our $VERSION = '0.01';
+use version; our $VERSION = qv('0.0.2');
 
 sub element_name { 'service' }
 
@@ -113,6 +114,10 @@ the Service Document as a new I<E<lt>workspaceE<gt>> element. For example:
     my $workspace = XML::Atom::Workspace->new;
     $workspace->title('Foo Bar');
     $service->add_workspace($workspace);
+
+=head2 $service->element_name
+
+=head2 $service->element_ns
 
 =head1 SEE ALSO
 

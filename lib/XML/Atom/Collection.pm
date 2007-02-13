@@ -1,10 +1,11 @@
-# $Id$
-
 package XML::Atom::Collection;
+
+use warnings;
 use strict;
-use base qw( XML::Atom::Base );
+use Carp;
 
 use XML::Atom;
+use base qw( XML::Atom::Base );
 
 __PACKAGE__->mk_elem_accessors(qw( accept ));
 __PACKAGE__->mk_attr_accessors(qw( href ));
@@ -61,6 +62,10 @@ XML::Atom::Collection - Collection object
 =head2 $collection->accept
 
 =head2 $collection->categories
+
+=head2 $collection->element_name
+
+=head2 $collection->element_ns
 
 =head1 SEE ALSO
 

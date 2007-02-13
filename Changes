@@ -1,6 +1,9 @@
-Revision history for Perl extension XML::Atom::Service.
+2007-02-13  Takeru INOUE  <takeru.inoue at gmail.com>
 
-0.01  Tue Feb 13 00:03:14 2007
-	- original version; created by h2xs 1.23 with options
-		-XAn XML::Atom::Service
+	* release 0.0.2: updated by using Module::Starter
+	* added use warnings; use Carp;
+        * added POD tests
 
+2007-02-12  Takeru INOUE  <takeru.inoue at gmail.com>
+	* release 0.01: created by h2xs 1.23 with options
+	  -XAn XML::Atom::Service

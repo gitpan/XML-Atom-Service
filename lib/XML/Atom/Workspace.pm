@@ -1,10 +1,11 @@
-# $Id$
-
 package XML::Atom::Workspace;
+
+use warnings;
 use strict;
-use base qw( XML::Atom::Base );
+use Carp;
 
 use XML::Atom;
+use base qw( XML::Atom::Base );
 
 sub element_name { 'workspace' }
 
@@ -62,6 +63,10 @@ XML::Atom::Workspace - Workspace object
 =head2 $workspace->collection
 
 =head2 $workspace->add_collection
+
+=head2 $workspace->element_name
+
+=head2 $workspace->element_ns
 
 =head1 SEE ALSO
 

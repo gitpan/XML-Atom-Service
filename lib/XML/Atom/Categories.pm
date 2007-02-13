@@ -1,11 +1,12 @@
-# $Id$
-
 package XML::Atom::Categories;
+
+use warnings;
 use strict;
+use Carp;
 
 use XML::Atom;
-use base qw( XML::Atom::Thing );
 use XML::Atom::Category;
+use base qw( XML::Atom::Thing );
 
 __PACKAGE__->mk_attr_accessors(qw( fixed scheme href ));
 
@@ -104,6 +105,10 @@ the Service Document as a new I<E<lt>categoryE<gt>> element. For example:
 =head2 $categories->scheme
 
 =head2 $categories->href
+
+=head2 $categories->element_name
+
+=head2 $categories->element_ns
 
 =head1 SEE ALSO
 

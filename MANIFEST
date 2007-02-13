@@ -1,18 +1,22 @@
+Build.PL
 Changes
-Makefile.PL
 MANIFEST
+META.yml # Will be created by "make dist"
+Makefile.PL
 README
-t/00-compile.t
-t/01-categories.t
-t/02-collection.t
-t/03-workspace.t
-t/04-service.t
-t/samples/atom-0.3/01.atomcat
-t/samples/atom-0.3/04.atomsrv
-t/samples/atom-1.0/01.atomcat
-t/samples/atom-1.0/04.atomsrv
 lib/XML/Atom/Categories.pm
 lib/XML/Atom/Collection.pm
 lib/XML/Atom/Workspace.pm
 lib/XML/Atom/Service.pm
-META.yml                                 Module meta-data (added by MakeMaker)
+t/00.load.t
+t/01.categories.t
+t/02.collection.t
+t/03.workspace.t
+t/04.service.t
+t/perlcritic.t
+t/pod-coverage.t
+t/pod.t
+t/samples/atom-0.3/01.atomcat
+t/samples/atom-0.3/04.atomsrv
+t/samples/atom-1.0/01.atomcat
+t/samples/atom-1.0/04.atomsrv

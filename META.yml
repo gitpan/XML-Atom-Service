@@ -1,11 +1,27 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         XML-Atom-Service
-version:      0.01
-version_from: lib/XML/Atom/Service.pm
-installdirs:  site
+---
+name: XML-Atom-Service
+version: v0.0.2
+author:
+  - 'Takeru INOUE <takeru.inoue@gmail.com>'
+abstract: Atom Service Document object
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
 requires:
-    XML::Atom:                     
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.30_01
+  Test::More: 0
+  XML::Atom: 0
+  version: 0
+provides:
+  XML::Atom::Categories:
+    file: lib/XML/Atom/Categories.pm
+  XML::Atom::Collection:
+    file: lib/XML/Atom/Collection.pm
+  XML::Atom::Service:
+    file: lib/XML/Atom/Service.pm
+    version: v0.0.2
+  XML::Atom::Workspace:
+    file: lib/XML/Atom/Workspace.pm
+generated_by: Module::Build version 0.2806
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
