@@ -5,7 +5,7 @@ use Test::More 'no_plan';
 use XML::Atom::Workspace;
 use XML::Atom::Collection;
 
-#$XML::Atom::DefaultVersion = '1.0';
+$XML::Atom::DefaultVersion = '1.0';
 
 my $workspace = XML::Atom::Workspace->new;
 isa_ok $workspace, 'XML::Atom::Workspace';

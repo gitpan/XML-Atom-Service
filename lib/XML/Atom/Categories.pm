@@ -14,9 +14,25 @@ sub element_name { 'categories' }
 
 sub element_ns { 'http://purl.org/atom/app#' }
 
-*{XML::Atom::Category::element_ns} = sub { 
+*{XML::Atom::Category::element_ns} = sub {
     $XML::Atom::Util::NS_MAP{$XML::Atom::DefaultVersion}
 };
+
+sub XML::Atom::Client::getCategories {
+    my $client = shift;
+    my($uri) = @_;
+    return $client->error("Must pass a ServiceURI before retrieving category document")
+        unless $uri;
+    my $req = HTTP::Request->new(GET => $uri);
+    my $res = $client->make_request($req);
+    return $client->error("Error on GET $uri: " . $res->status_line)
+        unless $res->code == 200;
+    my $categories = XML::Atom::Categories->new(Stream => \$res->content)
+        or return $client->error(XML::Atom::Categories->errstr);
+    $categories;
+}
+
+*XML::Atom::Client::getCategory = \&XML::Atom::Client::getCategories;
 
 1;
 __END__
@@ -42,6 +58,13 @@ XML::Atom::Categories - Atom Category Document object
   ## Get a list of the category elements.
   my @category = $categories->category;
 
+  ## Get category document by using XML::Atom::Client
+  use XML::Atom::Client;
+
+  my $client = XML::Atom::Client->new;
+  my $category = $client->getCategories($category_uri);
+
+
 =head1 DESCRIPTION
 
 Category Documents contain lists of categories described using the 
@@ -50,7 +73,7 @@ Category Documents contain lists of categories described using the
 The Category Document is defined in "The Atom Publishing Protocol," 
 IETF Internet-Draft.
 
-=head1 USAGE
+=head1 METHODS
 
 =head2 XML::Atom::Categories->new([ $stream ])
 
@@ -110,22 +133,52 @@ the Service Document as a new I<E<lt>categoryE<gt>> element. For example:
 
 =head2 $categories->element_ns
 
+=head2 XML::Atom::Client::getCategories($category_uri)
+
+Retrieves the category document at $category_uri.
+
+Returns an XML::Atom::Categories object representing the category document
+returned from the server.
+
+
 =head1 SEE ALSO
 
 L<XML::Atom>
-
 L<XML::Atom::Service>
 
 =head1 AUTHOR
 
-Takeru INOUE, E<lt>takeru.inoue@gmail.comE<gt>
+Takeru INOUE, E<lt>takeru.inoue _ gmail.comE<gt>
 
-=head1 COPYRIGHT AND LICENSE
+=head1 LICENCE AND COPYRIGHT
 
-Copyright (C) 2007 by Takeru INOUE
+Copyright (c) 2007, Takeru INOUE C<< <takeru.inoue _ gmail.com> >>. All rights reserved.
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.8 or,
-at your option, any later version of Perl 5 you may have available.
+This module is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself. See L<perlartistic>.
+
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
+ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
+YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE
+LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL,
+OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE
+THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
 
 =cut

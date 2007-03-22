@@ -1,8 +1,8 @@
 ---
 name: XML-Atom-Service
-version: v0.10.1
+version: v0.11.0
 author:
-  - 'Takeru INOUE <takeru.inoue@gmail.com>'
+  - 'Takeru INOUE <takeru.inoue _ gmail.com>'
 abstract: Atom Service Document object
 license: perl
 resources:
@@ -18,7 +18,7 @@ provides:
     file: lib/XML/Atom/Collection.pm
   XML::Atom::Service:
     file: lib/XML/Atom/Service.pm
-    version: v0.10.1
+    version: v0.11.0
   XML::Atom::Workspace:
     file: lib/XML/Atom/Workspace.pm
 generated_by: Module::Build version 0.2806

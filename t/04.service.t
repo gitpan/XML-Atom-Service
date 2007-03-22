@@ -5,7 +5,7 @@ use Test::More 'no_plan';
 use XML::Atom::Service;
 use XML::Atom::Workspace;
 
-#$XML::Atom::DefaultVersion = '1.0';
+$XML::Atom::DefaultVersion = '1.0';
 
 my $service = XML::Atom::Service->new;
 isa_ok $service, 'XML::Atom::Service';

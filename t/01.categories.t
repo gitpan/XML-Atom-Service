@@ -5,7 +5,7 @@ use Test::More 'no_plan';
 use XML::Atom::Categories;
 use XML::Atom::Category;
 
-#$XML::Atom::DefaultVersion = '1.0';
+$XML::Atom::DefaultVersion = '1.0';
 
 my $categories = XML::Atom::Categories->new;
 isa_ok $categories, 'XML::Atom::Categories';

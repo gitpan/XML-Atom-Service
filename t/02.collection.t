@@ -6,7 +6,7 @@ use XML::Atom::Collection;
 use XML::Atom::Categories;
 use XML::Atom::Category;
 
-#$XML::Atom::DefaultVersion = '1.0';
+$XML::Atom::DefaultVersion = '1.0';
 
 my $collection = XML::Atom::Collection->new;
 isa_ok $collection, 'XML::Atom::Collection';
