@@ -37,9 +37,9 @@ is $collection[1]->href, 'http://example.org/reilly/sub';
 
 my $xml = $workspace->as_xml;
 my $ns_uri = $XML::Atom::Util::NS_MAP{ $XML::Atom::DefaultVersion };
-like $xml, qr!<workspace xmlns="http://purl.org/atom/app#" xmlns:atom="$ns_uri"!;
+like $xml, qr!<workspace xmlns="http://purl.org/atom/app#"(?: xmlns:atom="$ns_uri")?!;
 like $xml, qr!<atom:title xmlns:atom="$ns_uri">Foo Bar</atom:title>!;
-like $xml, qr!<collection xmlns="http://purl.org/atom/app#"!;
+like $xml, qr!<collection(?: xmlns="http://purl.org/atom/app#")?!;
 like $xml, qr!href="http://example.org/reilly/main"!;
 like $xml, qr!href="http://example.org/reilly/sub"!;
 like $xml, qr!</workspace>$!;
