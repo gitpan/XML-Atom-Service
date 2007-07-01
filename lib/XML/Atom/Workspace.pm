@@ -5,11 +5,12 @@ use strict;
 use Carp;
 
 use XML::Atom;
+use XML::Atom::Service;
 use base qw( XML::Atom::Base );
 
 sub element_name { 'workspace' }
 
-sub element_ns { 'http://www.w3.org/2007/app' }
+sub element_ns { $XML::Atom::Service::DefaultNamespace }
 
 sub title {
     my $self   = shift;

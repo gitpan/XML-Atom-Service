@@ -5,6 +5,7 @@ use strict;
 use Carp;
 
 use XML::Atom;
+use XML::Atom::Service;
 use base qw( XML::Atom::Base );
 
 __PACKAGE__->mk_elem_accessors(qw( accept ));
@@ -12,7 +13,7 @@ __PACKAGE__->mk_attr_accessors(qw( href ));
 
 sub element_name { 'collection' }
 
-sub element_ns { 'http://www.w3.org/2007/app' }
+sub element_ns { $XML::Atom::Service::DefaultNamespace }
 
 sub title {
     my $self   = shift;

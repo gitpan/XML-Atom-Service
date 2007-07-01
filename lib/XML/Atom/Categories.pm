@@ -5,6 +5,7 @@ use strict;
 use Carp;
 
 use XML::Atom;
+use XML::Atom::Service;
 use XML::Atom::Category;
 use base qw( XML::Atom::Thing );
 
@@ -12,7 +13,7 @@ __PACKAGE__->mk_attr_accessors(qw( fixed scheme href ));
 
 sub element_name { 'categories' }
 
-sub element_ns { 'http://www.w3.org/2007/app' }
+sub element_ns { $XML::Atom::Service::DefaultNamespace }
 
 *{XML::Atom::Category::element_ns} = sub {
     $XML::Atom::Util::NS_MAP{$XML::Atom::DefaultVersion}
@@ -44,6 +45,9 @@ XML::Atom::Categories - Atom Category Document object
 =head1 SYNOPSIS
 
   use XML::Atom::Categories;
+
+  # use the new namespace, instead of old one 'http://purl.org/atom/app#'
+  #$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
 
   my $category = XML::Atom::Category->new;
   $category->scheme('http://example.org/extra-cats/');

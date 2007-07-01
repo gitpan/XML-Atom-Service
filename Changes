@@ -1,5 +1,11 @@
 2007-07-02  Takeru INOUE  <takeru.inoue _ gmail.com>
 
+	* release 0.12.1:
+	* XML/Atom/Service.pm:
+	- introduce global variable $DefaultNamespace
+
+2007-07-02  Takeru INOUE  <takeru.inoue _ gmail.com>
+
 	* release 0.12.0:
 	- change namespace to 'http://www.w3.org/2007/app' based on
 	  the new APP specirfication

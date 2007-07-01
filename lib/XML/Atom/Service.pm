@@ -9,11 +9,13 @@ use XML::Atom::Workspace;
 use XML::Atom::Collection;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.12.0');
+use version; our $VERSION = qv('0.12.1');
+
+our $DefaultNamespace = 'http://purl.org/atom/app#';
 
 sub element_name { 'service' }
 
-sub element_ns { 'http://www.w3.org/2007/app' }
+sub element_ns { $DefaultNamespace }
 
 __PACKAGE__->mk_object_list_accessor(
     'workspace' => 'XML::Atom::Workspace',
@@ -45,6 +47,9 @@ XML::Atom::Service - Atom Service Document object
 
   use XML::Atom::Service;
   use XML::Atom::Categories;
+
+  # use the new namespace, instead of old one 'http://purl.org/atom/app#'
+  #$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
 
   my $categories = XML::Atom::Categories->new;
   $categories->href('http://example.com/cats/forMain.cats');
@@ -146,6 +151,17 @@ Retrieves the service document at $service_uri.
 
 Returns an XML::Atom::Service object representing the service document
 returned from the server.
+
+
+=head1 USING NEW NAMESPACE
+
+By default, XML::Atom::Service and other classes (Workspace, Collection and 
+Categories) will create entities using old namespace, 'http://purl.org/atom/app#'.
+In order to use the new namespace, you can set namespace by setting 
+$XML::Atom::Service::DefaultNamespace global variable like:
+
+  use XML::Atom::Service;
+  $XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
 
 
 =head1 SEE ALSO
