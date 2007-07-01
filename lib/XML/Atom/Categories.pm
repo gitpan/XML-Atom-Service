@@ -12,7 +12,7 @@ __PACKAGE__->mk_attr_accessors(qw( fixed scheme href ));
 
 sub element_name { 'categories' }
 
-sub element_ns { 'http://purl.org/atom/app#' }
+sub element_ns { 'http://www.w3.org/2007/app' }
 
 *{XML::Atom::Category::element_ns} = sub {
     $XML::Atom::Util::NS_MAP{$XML::Atom::DefaultVersion}

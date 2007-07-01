@@ -12,7 +12,7 @@ __PACKAGE__->mk_attr_accessors(qw( href ));
 
 sub element_name { 'collection' }
 
-sub element_ns { 'http://purl.org/atom/app#' }
+sub element_ns { 'http://www.w3.org/2007/app' }
 
 sub title {
     my $self   = shift;

@@ -9,7 +9,7 @@ use base qw( XML::Atom::Base );
 
 sub element_name { 'workspace' }
 
-sub element_ns { 'http://purl.org/atom/app#' }
+sub element_ns { 'http://www.w3.org/2007/app' }
 
 sub title {
     my $self   = shift;

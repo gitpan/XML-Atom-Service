@@ -57,7 +57,7 @@ is $category[1]->term, 'serious';
 my $xml = $categories->as_xml;
 like $xml, qr!^<\?xml version="1.0" encoding="utf-8"\?>!;
 
-like $xml, qr!<categories xmlns="http://purl.org/atom/app#"!;
+like $xml, qr!<categories xmlns="http://www.w3.org/2007/app"!;
 like $xml, qr!fixed="yes"!;
 like $xml, qr!scheme="http://example.org/extra-cats/"!;
 

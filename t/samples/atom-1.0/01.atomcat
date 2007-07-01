@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<categories xmlns="http://purl.org/atom/app#"
+<categories xmlns="http://www.w3.org/2007/app"
             xmlns:atom="http://www.w3.org/2005/Atom"
             fixed="yes" scheme="http://example.com/cats/big3">
   <atom:category term="animal" />

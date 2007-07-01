@@ -9,11 +9,11 @@ use XML::Atom::Workspace;
 use XML::Atom::Collection;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.11.1');
+use version; our $VERSION = qv('0.12.0');
 
 sub element_name { 'service' }
 
-sub element_ns { 'http://purl.org/atom/app#' }
+sub element_ns { 'http://www.w3.org/2007/app' }
 
 __PACKAGE__->mk_object_list_accessor(
     'workspace' => 'XML::Atom::Workspace',
