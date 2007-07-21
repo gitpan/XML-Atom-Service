@@ -5,8 +5,9 @@ use strict;
 use Carp;
 
 use XML::Atom;
-use XML::Atom::Service;
 use XML::Atom::Category;
+use XML::Atom::Client;
+use XML::Atom::Service;
 use base qw( XML::Atom::Thing );
 
 __PACKAGE__->mk_attr_accessors(qw( fixed scheme href ));
@@ -15,25 +16,34 @@ sub element_name { 'categories' }
 
 sub element_ns { $XML::Atom::Service::DefaultNamespace }
 
-*{XML::Atom::Category::element_ns} = sub {
-    $XML::Atom::Util::NS_MAP{$XML::Atom::DefaultVersion}
-};
+package XML::Atom::Category;
 
-sub XML::Atom::Client::getCategories {
-    my $client = shift;
-    my($uri) = @_;
-    return $client->error("Must pass a ServiceURI before retrieving category document")
-        unless $uri;
-    my $req = HTTP::Request->new(GET => $uri);
-    my $res = $client->make_request($req);
-    return $client->error("Error on GET $uri: " . $res->status_line)
-        unless $res->code == 200;
-    my $categories = XML::Atom::Categories->new(Stream => \$res->content)
-        or return $client->error(XML::Atom::Categories->errstr);
-    $categories;
+sub element_ns { $XML::Atom::Util::NS_MAP{$XML::Atom::DefaultVersion} }
+
+package XML::Atom::Client;
+
+if ( ! __PACKAGE__->can('getCategories') ) {
+    *getCategories = sub {
+	my $client = shift;
+	my($uri) = @_;
+	return $client->error("Must pass a CategoriesURI before retrieving category document")
+	    unless $uri;
+	my $req = HTTP::Request->new(GET => $uri);
+	my $res = $client->make_request($req);
+	return $client->error("Error on GET $uri: " . $res->status_line)
+	    unless $res->code == 200;
+	my $categories = XML::Atom::Categories->new(Stream => \$res->content)
+	    or return $client->error(XML::Atom::Categories->errstr);
+	$categories;
+    };
 }
 
-*XML::Atom::Client::getCategory = \&XML::Atom::Client::getCategories;
+if ( ! __PACKAGE__->can('getCategory') ) {
+    *getCategory = sub {
+	warn 'getCategory is DEPRECATED, and will be removed in the future version';
+	XML::Atom::Client::getCategories(@_);
+    };
+}
 
 1;
 __END__

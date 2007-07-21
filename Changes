@@ -1,3 +1,15 @@
+2007-07-21  Takeru INOUE  <takeru.inoue _ gmail.com>
+
+	* release 0.13.0:
+	* XML/Atom/Service.pm:
+	- add some APP elements to XML::Atom::Entry, //entry/edited,
+	  //entry/control/draft
+	* add t/06.entry.t
+	* XML/Atom/Categories.pm:
+	- getCategory is DEPRECATED (will be removed in the near future)
+	* t/0*.t
+	- change namespace to 'http://www.w3.org/2007/app'
+
 2007-07-02  Takeru INOUE  <takeru.inoue _ gmail.com>
 
 	* release 0.12.1:
@@ -14,7 +26,7 @@
 
 	* release 0.11.1:
 	* t/0*.t
-	- xmlns is optional in regexp
+	- xmlns is optional in regexp for newer LibXML
 
 2007-03-22  Takeru INOUE  <takeru.inoue _ gmail.com>
 

@@ -5,11 +5,10 @@ use strict;
 use Carp;
 
 use XML::Atom;
-use XML::Atom::Workspace;
-use XML::Atom::Collection;
+use XML::Atom::Client;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.12.1');
+use version; our $VERSION = qv('0.13.0');
 
 our $DefaultNamespace = 'http://purl.org/atom/app#';
 
@@ -22,19 +21,53 @@ __PACKAGE__->mk_object_list_accessor(
     'workspaces',
 );
 
-sub XML::Atom::Client::getService {
-    my $client = shift;
-    my($uri) = @_;
-    return $client->error("Must pass a ServiceURI before retrieving service document")
-        unless $uri;
-    my $req = HTTP::Request->new(GET => $uri);
-    my $res = $client->make_request($req);
-    return $client->error("Error on GET $uri: " . $res->status_line)
-        unless $res->code == 200;
-    my $service = XML::Atom::Service->new(Stream => \$res->content)
-        or return $client->error(XML::Atom::Service->errstr);
-    $service;
+package XML::Atom::Client;
+
+if ( ! __PACKAGE__->can('getService') ) {
+    *getService = sub {
+	my $client = shift;
+	my($uri) = @_;
+	return $client->error("Must pass a ServiceURI before retrieving service document")
+	    unless $uri;
+	my $req = HTTP::Request->new(GET => $uri);
+	my $res = $client->make_request($req);
+	return $client->error("Error on GET $uri: " . $res->status_line)
+	    unless $res->code == 200;
+	my $service = XML::Atom::Service->new(Stream => \$res->content)
+	    or return $client->error(XML::Atom::Service->errstr);
+	$service;
+    };
 }
+
+package XML::Atom::Entry;
+
+__PACKAGE__->mk_object_list_accessor(
+    'control' => 'XML::Atom::Control',
+);
+
+if ( ! __PACKAGE__->can('edited') ) {
+    *edited = sub {
+	my $self   = shift;
+	my $ns_uri = $XML::Atom::Service::DefaultNamespace;
+	my $app    = XML::Atom::Namespace->new( app => $ns_uri );
+	if (@_) {
+	    $self->set( $app, 'edited', $_[0] );
+	}
+	else {
+	    $self->get( $app, 'edited' );
+	}
+    };
+}
+
+package XML::Atom::Control;
+
+use base qw( XML::Atom::Base );
+
+__PACKAGE__->mk_elem_accessors(qw( draft ));
+
+sub element_name { 'control' }
+
+sub element_ns { $XML::Atom::Service::DefaultNamespace }
 
 1;
 __END__

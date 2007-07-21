@@ -1,11 +1,13 @@
 use strict;
 use warnings;
 use Carp;
-use Test::More 'no_plan';
+use Test::More tests => 41;
+use Test::NoWarnings;;
 use XML::Atom::Categories;
 use XML::Atom::Category;
 
 $XML::Atom::DefaultVersion = '1.0';
+$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
 
 my $categories = XML::Atom::Categories->new;
 isa_ok $categories, 'XML::Atom::Categories';
@@ -57,7 +59,7 @@ is $category[1]->term, 'serious';
 my $xml = $categories->as_xml;
 like $xml, qr!^<\?xml version="1.0" encoding="utf-8"\?>!;
 
-like $xml, qr!<categories xmlns="http://purl.org/atom/app#"!;
+like $xml, qr!<categories xmlns="http://www.w3.org/2007/app"!;
 like $xml, qr!fixed="yes"!;
 like $xml, qr!scheme="http://example.org/extra-cats/"!;
 

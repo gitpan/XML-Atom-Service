@@ -1,7 +1,8 @@
 use strict;
 use warnings;
 use Carp;
-use Test::More 'no_plan';
+use Test::More tests => 3;
+use Test::NoWarnings;
 use XML::Atom::Client;
 use XML::Atom::Service;
 use XML::Atom::Categories;

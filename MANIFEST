@@ -14,11 +14,12 @@ t/02.collection.t
 t/03.workspace.t
 t/04.service.t
 t/05.client.t
+t/06.entry.t
 t/perlcritic.t
 t/pod-coverage.t
 t/pod.t
 t/samples/atom-0.3/01.atomcat
-t/samples/atom-0.3/04.atomsrv
+t/samples/atom-0.3/04.atomsvc
 t/samples/atom-1.0/01.atomcat
-t/samples/atom-1.0/04.atomsrv
+t/samples/atom-1.0/04.atomsvc
 

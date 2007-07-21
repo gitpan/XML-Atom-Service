@@ -1,6 +1,6 @@
 ---
 name: XML-Atom-Service
-version: 0.12.1
+version: 0.13.0
 author:
   - 'Takeru INOUE <takeru.inoue _ gmail.com>'
 abstract: Atom Service Document object
@@ -14,11 +14,19 @@ requires:
 provides:
   XML::Atom::Categories:
     file: lib/XML/Atom/Categories.pm
+  XML::Atom::Category:
+    file: lib/XML/Atom/Categories.pm
+  XML::Atom::Client:
+    file: lib/XML/Atom/Service.pm
   XML::Atom::Collection:
     file: lib/XML/Atom/Collection.pm
+  XML::Atom::Control:
+    file: lib/XML/Atom/Service.pm
+  XML::Atom::Entry:
+    file: lib/XML/Atom/Service.pm
   XML::Atom::Service:
     file: lib/XML/Atom/Service.pm
-    version: 0.12.1
+    version: 0.13.0
   XML::Atom::Workspace:
     file: lib/XML/Atom/Workspace.pm
 generated_by: Module::Build version 0.2808
