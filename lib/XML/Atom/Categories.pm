@@ -16,14 +16,10 @@ sub element_name { 'categories' }
 
 sub element_ns { $XML::Atom::Service::DefaultNamespace }
 
-package XML::Atom::Category;
+sub XML::Atom::Category::element_ns { $XML::Atom::Util::NS_MAP{$XML::Atom::DefaultVersion} }
 
-sub element_ns { $XML::Atom::Util::NS_MAP{$XML::Atom::DefaultVersion} }
-
-package XML::Atom::Client;
-
-if ( ! __PACKAGE__->can('getCategories') ) {
-    *getCategories = sub {
+if ( ! XML::Atom::Client->can('getCategories') ) {
+    *XML::Atom::Client::getCategories = sub {
 	my $client = shift;
 	my($uri) = @_;
 	return $client->error("Must pass a CategoriesURI before retrieving category document")
@@ -38,8 +34,8 @@ if ( ! __PACKAGE__->can('getCategories') ) {
     };
 }
 
-if ( ! __PACKAGE__->can('getCategory') ) {
-    *getCategory = sub {
+if ( ! XML::Atom::Client->can('getCategory') ) {
+    *XML::Atom::Client::getCategory = sub {
 	warn 'getCategory is DEPRECATED, and will be removed in the future version';
 	XML::Atom::Client::getCategories(@_);
     };

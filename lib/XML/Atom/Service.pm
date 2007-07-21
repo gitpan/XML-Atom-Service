@@ -8,7 +8,7 @@ use XML::Atom;
 use XML::Atom::Client;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.13.0');
+use version; our $VERSION = qv('0.13.1');
 
 our $DefaultNamespace = 'http://purl.org/atom/app#';
 
@@ -21,10 +21,8 @@ __PACKAGE__->mk_object_list_accessor(
     'workspaces',
 );
 
-package XML::Atom::Client;
-
-if ( ! __PACKAGE__->can('getService') ) {
-    *getService = sub {
+if ( ! XML::Atom::Client->can('getService') ) {
+    *XML::Atom::Client::getService = sub {
 	my $client = shift;
 	my($uri) = @_;
 	return $client->error("Must pass a ServiceURI before retrieving service document")
@@ -39,14 +37,8 @@ if ( ! __PACKAGE__->can('getService') ) {
     };
 }
 
-package XML::Atom::Entry;
-
-__PACKAGE__->mk_object_list_accessor(
-    'control' => 'XML::Atom::Control',
-);
-
-if ( ! __PACKAGE__->can('edited') ) {
-    *edited = sub {
+if ( ! XML::Atom::Entry->can('edited') ) {
+    *XML::Atom::Entry::edited = sub {
 	my $self   = shift;
 	my $ns_uri = $XML::Atom::Service::DefaultNamespace;
 	my $app    = XML::Atom::Namespace->new( app => $ns_uri );
@@ -59,15 +51,21 @@ if ( ! __PACKAGE__->can('edited') ) {
     };
 }
 
-package XML::Atom::Control;
+if ( ! XML::Atom::Entry->can('control') ) {
+    XML::Atom::Entry->mk_object_list_accessor(
+	'control' => 'XML::Atom::Control',
+    );
 
-use base qw( XML::Atom::Base );
+    package XML::Atom::Control;
 
-__PACKAGE__->mk_elem_accessors(qw( draft ));
+    use base qw( XML::Atom::Base );
 
-sub element_name { 'control' }
+    __PACKAGE__->mk_elem_accessors(qw( draft ));
 
-sub element_ns { $XML::Atom::Service::DefaultNamespace }
+    sub element_name { 'control' }
+
+    sub element_ns { $XML::Atom::Service::DefaultNamespace }
+}
 
 1;
 __END__
