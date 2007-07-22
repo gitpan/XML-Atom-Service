@@ -8,7 +8,6 @@ use XML::Atom;
 use XML::Atom::Service;
 use base qw( XML::Atom::Base );
 
-__PACKAGE__->mk_elem_accessors(qw( accept ));
 __PACKAGE__->mk_attr_accessors(qw( href ));
 
 sub element_name { 'collection' }
@@ -30,6 +29,65 @@ sub title {
 __PACKAGE__->mk_object_list_accessor(
     'categories' => 'XML::Atom::Categories',
 );
+
+## accessors to text elements, multiple which there can be
+if ( ! XML::Atom::Base->can('mk_elem_list_accessor') ) {
+    use XML::Atom::Util qw( childlist create_element );
+
+    *XML::Atom::Base::mk_elem_list_accessor = sub {
+	my $class = shift;
+	my($name, $moniker) = @_;
+
+	no strict 'refs'; ## no critic
+
+	*{"$class\::$name"} = sub {
+	    my $obj = shift;
+
+	    my $ns_uri = $class->element_ns || $obj->ns;
+	    if (@_) {
+		# setter: clear existent elements first
+		my @elem = childlist($obj->elem, $ns_uri, $name);
+		for my $el (@elem) {
+		    $obj->elem->removeChild($el);
+		}
+
+		# add the new elements for each
+		my $adder = "add_$name";
+		for my $add_elem (@_) {
+		    $obj->$adder($add_elem);
+		}
+	    } else {
+		# getter:
+		my @children = map { $_->textContent } childlist( $obj->elem, $ns_uri, $name );
+		wantarray ? @children : $children[0];
+	    }
+	};
+
+	if ($moniker) {
+	    *{"$class\::$moniker"} = sub {
+		my $obj = shift;
+		if (@_) {
+		    return $obj->$name(@_);
+		} else {
+		    my @obj = $obj->$name;
+		    return wantarray ? @obj : \@obj;
+		}
+	    };
+	}
+	
+	*{"$class\::add_$name"} = sub {
+	    my $obj = shift;
+	    my($stuff) = @_;
+
+	    my $ns_uri = $class->element_ns || $obj->ns;
+	    my $elem = create_element( $ns_uri, 'accept' );
+	    $elem->appendText($stuff);
+	    $obj->elem->appendChild($elem);
+	};
+    };
+}
+
+__PACKAGE__->mk_elem_list_accessor( 'accept', 'accepts' );
 
 1;
 __END__
@@ -61,6 +119,10 @@ XML::Atom::Collection - Collection object
 =head2 $collection->title
 
 =head2 $collection->accept
+
+=head2 $collection->accepts
+
+=head2 $collection->add_accept
 
 =head2 $collection->categories
 

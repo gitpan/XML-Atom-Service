@@ -1,5 +1,11 @@
 2007-07-21  Takeru INOUE  <takeru.inoue _ gmail.com>
 
+	* release 0.13.2:
+	* XML/Atom/Service.pm, XML/Atom/Collection.pm:
+	- support multiple //collection/accept
+
+2007-07-21  Takeru INOUE  <takeru.inoue _ gmail.com>
+
 	* release 0.13.1:
 	* XML/Atom/Service.pm, XML/Atom/Categories.pm:
 	- avoid redefining subroutines for XML::Atom

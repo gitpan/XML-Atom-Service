@@ -4,7 +4,6 @@ use Carp;
 use Test::More tests => 18;
 use Test::NoWarnings;;
 use XML::Atom::Service;
-use XML::Atom::Workspace;
 
 $XML::Atom::DefaultVersion = '1.0';
 $XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Carp;
-use Test::More tests => 14;
+use Test::More tests => 17;
 use Test::NoWarnings;
 use XML::Atom;
 use XML::Atom::Collection;
@@ -19,8 +19,12 @@ is $collection->href, 'http://example.org/reilly/main';
 
 $collection->title('Foo Bar');
 is $collection->title, 'Foo Bar';
-$collection->accept('image/*');
-is $collection->accept, 'image/*';
+$collection->add_accept('image/png');
+$collection->add_accept('image/jpeg');
+my @accepts = $collection->accepts;
+is @accepts, 2;
+is $accepts[0], 'image/png';
+is $accepts[1], 'image/jpeg';
 
 my $categories = XML::Atom::Categories->new;
 my $category = XML::Atom::Category->new;
@@ -39,6 +43,8 @@ my $ns_uri = $XML::Atom::Util::NS_MAP{ $XML::Atom::DefaultVersion };
 like $xml, qr!<collection xmlns="http://www.w3.org/2007/app"(?: xmlns:atom="$ns_uri")?!;
 like $xml, qr!href="http://example.org/reilly/main"!;
 like $xml, qr!<atom:title xmlns:atom="$ns_uri">Foo Bar</atom:title>!;
-like $xml, qr!<accept(?: xmlns="http://purl.org/atom/app#")?>image/\*</accept>!;
+like $xml, qr!<accept(?: xmlns="http://purl.org/atom/app#")?>image/png</accept>!;
+like $xml, qr!<accept(?: xmlns="http://purl.org/atom/app#")?>image/jpeg</accept>!;
 like $xml, qr!<categories!;
 like $xml, qr!</collection>$!;
+

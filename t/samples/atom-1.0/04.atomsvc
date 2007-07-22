@@ -11,7 +11,8 @@
 
     <collection href="http://example.org/reilly/pic" >
       <atom:title>Pictures</atom:title>
-      <accept>image/*</accept>
+      <accept>image/png</accept>
+      <accept>image/jpeg</accept>
     </collection>
   </workspace>
 

@@ -6,9 +6,12 @@ use Carp;
 
 use XML::Atom;
 use XML::Atom::Client;
+use XML::Atom::Workspace;
+use XML::Atom::Collection;
+use XML::Atom::Categories;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.13.1');
+use version; our $VERSION = qv('0.13.2');
 
 our $DefaultNamespace = 'http://purl.org/atom/app#';
 
@@ -77,7 +80,6 @@ XML::Atom::Service - Atom Service Document object
 =head1 SYNOPSIS
 
   use XML::Atom::Service;
-  use XML::Atom::Categories;
 
   # use the new namespace, instead of old one 'http://purl.org/atom/app#'
   #$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
@@ -89,7 +91,8 @@ XML::Atom::Service - Atom Service Document object
   my $collection = XML::Atom::Collection->new;
   $collection->href('http://example.org/reilly/main');
   $collection->title('My Blog Entries');
-  $collection->categories($categories);
+  $collection->add_accept('application/atom+xml;type=entry');
+  $collection->add_categories($categories);
 
   my $workspace = XML::Atom::Workspace->new;
   $workspace->title('Main Site');
