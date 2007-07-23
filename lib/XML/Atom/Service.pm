@@ -11,7 +11,7 @@ use XML::Atom::Collection;
 use XML::Atom::Categories;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.13.2');
+use version; our $VERSION = qv('0.13.3');
 
 our $DefaultNamespace = 'http://purl.org/atom/app#';
 

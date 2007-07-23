@@ -22,4 +22,5 @@ t/samples/atom-0.3/01.atomcat
 t/samples/atom-0.3/04.atomsvc
 t/samples/atom-1.0/01.atomcat
 t/samples/atom-1.0/04.atomsvc
+t/samples/atom-1.0/06.entry
 

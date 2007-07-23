@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<entry xmlns="http://www.w3.org/2005/Atom"
+       xmlns:app="http://purl.org/atom/app#">
+  <title>Title</title>
+  <app:edited>2007-01-01T00:00:00Z</app:edited>
+  <app:control>
+    <app:draft>yes</app:draft>
+  </app:control>
+</entry>
+
