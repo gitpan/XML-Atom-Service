@@ -1,6 +1,6 @@
 ---
 name: XML-Atom-Service
-version: 0.13.3
+version: 0.13.4
 author:
   - 'Takeru INOUE <takeru.inoue _ gmail.com>'
 abstract: Atom Service Document object
@@ -20,7 +20,7 @@ provides:
     file: lib/XML/Atom/Service.pm
   XML::Atom::Service:
     file: lib/XML/Atom/Service.pm
-    version: 0.13.3
+    version: 0.13.4
   XML::Atom::Workspace:
     file: lib/XML/Atom/Workspace.pm
 generated_by: Module::Build version 0.2808

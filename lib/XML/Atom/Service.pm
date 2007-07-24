@@ -11,7 +11,7 @@ use XML::Atom::Collection;
 use XML::Atom::Categories;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.13.3');
+use version; our $VERSION = qv('0.13.4');
 
 our $DefaultNamespace = 'http://purl.org/atom/app#';
 
@@ -68,6 +68,10 @@ if ( ! XML::Atom::Entry->can('control') ) {
     sub element_name { 'control' }
 
     sub element_ns { $XML::Atom::Service::DefaultNamespace }
+}
+
+if ( ! XML::Atom::Content->can('src') ) {
+    XML::Atom::Content->mk_attr_accessors( qw( src ) );
 }
 
 1;

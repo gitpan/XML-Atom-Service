@@ -2,9 +2,9 @@
 <entry xmlns="http://www.w3.org/2005/Atom"
        xmlns:app="http://purl.org/atom/app#">
   <title>Title</title>
+  <content type="image/png" src="http://example.com/foo.png"/>
   <app:edited>2007-01-01T00:00:00Z</app:edited>
   <app:control>
     <app:draft>yes</app:draft>
   </app:control>
 </entry>
-
