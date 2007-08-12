@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Carp;
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::NoWarnings;
 use XML::Atom::Entry;
 use XML::Atom::Service;
@@ -20,10 +20,12 @@ $control->draft('yes');
 is $control->draft, 'yes';
 $entry->control($control);
 
-$entry->content('');
-$entry->content->src('http://example.com/foo.png');
-is $entry->content->src, 'http://example.com/foo.png';
-
+my $content = XML::Atom::Content->new( Version => 1.0 );
+$content->src('http://example.com/foo.png');
+$content->type('image/png');
+is $content->src, 'http://example.com/foo.png';
+is $content->type, 'image/png';
+$entry->content($content);
 
 my $ns_uri = quotemeta $XML::Atom::Service::DefaultNamespace;
 like $entry->as_xml, qr{<app:edited(?: xmlns:app="$ns_uri")?>2007-01-01T00:00:00Z</app:edited>};

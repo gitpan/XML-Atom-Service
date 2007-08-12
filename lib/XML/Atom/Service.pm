@@ -11,7 +11,7 @@ use XML::Atom::Collection;
 use XML::Atom::Categories;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.13.4');
+use version; our $VERSION = qv('0.14.0');
 
 our $DefaultNamespace = 'http://purl.org/atom/app#';
 
@@ -23,22 +23,6 @@ __PACKAGE__->mk_object_list_accessor(
     'workspace' => 'XML::Atom::Workspace',
     'workspaces',
 );
-
-if ( ! XML::Atom::Client->can('getService') ) {
-    *XML::Atom::Client::getService = sub {
-	my $client = shift;
-	my($uri) = @_;
-	return $client->error("Must pass a ServiceURI before retrieving service document")
-	    unless $uri;
-	my $req = HTTP::Request->new(GET => $uri);
-	my $res = $client->make_request($req);
-	return $client->error("Error on GET $uri: " . $res->status_line)
-	    unless $res->code == 200;
-	my $service = XML::Atom::Service->new(Stream => \$res->content)
-	    or return $client->error(XML::Atom::Service->errstr);
-	$service;
-    };
-}
 
 if ( ! XML::Atom::Entry->can('edited') ) {
     *XML::Atom::Entry::edited = sub {
@@ -72,6 +56,23 @@ if ( ! XML::Atom::Entry->can('control') ) {
 
 if ( ! XML::Atom::Content->can('src') ) {
     XML::Atom::Content->mk_attr_accessors( qw( src ) );
+}
+
+if ( ! XML::Atom::Client->can('getService') ) {
+    *XML::Atom::Client::getService = sub {
+	warn 'Atompub::Client is recommended for Atom Publishing Protocol.';
+	my $client = shift;
+	my($uri) = @_;
+	return $client->error("Must pass a ServiceURI before retrieving service document")
+	    unless $uri;
+	my $req = HTTP::Request->new(GET => $uri);
+	my $res = $client->make_request($req);
+	return $client->error("Error on GET $uri: " . $res->status_line)
+	    unless $res->code == 200;
+	my $service = XML::Atom::Service->new(Stream => \$res->content)
+	    or return $client->error(XML::Atom::Service->errstr);
+	$service;
+    };
 }
 
 1;
@@ -112,11 +113,26 @@ XML::Atom::Service - Atom Service Document object
   my @collection = $workspace[0]->collection;
   my @categories = $collection[0]->categories;
 
-  ## Get service document by using XML::Atom::Client
-  use XML::Atom::Client;
 
-  my $client = XML::Atom::Client->new;
-  my $service = $client->getService($service_uri);
+  ## Some elements introduced by the Atom Publishing Protocol are 
+  ## imported into XML::Atom .
+  use XML::Atom::Entry;
+
+  my $entry = XML::Atom::Entry->new;
+
+  ## <app:edited>2007-01-01T00:00:00Z</app:edited>
+  $entry->edited('2007-01-01T00:00:00Z');
+
+  ## <app:control><app:draft>yes</app:draft></app:control>
+  my $control = XML::Atom::Control->new;
+  $control->draft('yes');
+  $entry->control($control);
+
+  ## <atom:content src="..."/>
+  my $content = XML::Atom::Content->new( Version => 1.0 );
+  $content->src('http://example.com/foo.png');
+  $content->type('image/png');
+  $entry->content($content);
 
 
 =head1 DESCRIPTION
@@ -128,6 +144,7 @@ They describe the location and capabilities of one or more Collection.
 
 The Service Document is defined in "The Atom Publishing Protocol," 
 IETF Internet-Draft.
+
 
 =head1 METHODS
 
@@ -183,12 +200,27 @@ the Service Document as a new I<E<lt>workspaceE<gt>> element. For example:
 
 =head2 $service->element_ns
 
-=head2 XML::Atom::Client::getService($service_uri)
 
-Retrieves the service document at $service_uri.
+=head1 METHODS of XML::Atom
 
-Returns an XML::Atom::Service object representing the service document
-returned from the server.
+Some elements are introduced by the Atom Publishing Protocol, and they 
+are imported into XML::Atom .
+
+=head2 $entry->control([ $control ])
+
+Returns an XML::Atom::Control object representing the control of the 
+entry, or "undef" if there is no author information present.
+
+If $control is supplied, it should be an XML::Atom::Control object 
+representing the control. For example:
+
+    my $control = XML::Atom::Control->new;
+    $control->draft('yes');
+    $entry->control($control);
+
+=head2 $entry->edited
+
+=head2 $content->src
 
 
 =head1 USING NEW NAMESPACE
@@ -205,11 +237,14 @@ $XML::Atom::Service::DefaultNamespace global variable like:
 =head1 SEE ALSO
 
 L<XML::Atom>
-L<XML::Atom::Categories>
+L<Atompub::Client>
+L<Atompub::Server>
+
 
 =head1 AUTHOR
 
 Takeru INOUE, E<lt>takeru.inoue _ gmail.comE<gt>
+
 
 =head1 LICENCE AND COPYRIGHT
 

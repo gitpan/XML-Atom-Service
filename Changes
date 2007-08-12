@@ -1,3 +1,11 @@
+2007-08-12  Takeru INOUE  <takeru.inoue _ gmail.com>
+
+	* release 0.14.0:
+	* XML/Atom/Service.pm
+	- getService is moved in Atompub::Client
+	* XML/Atom/Categories.pm
+	- getCategories is moved in Atompub::Client
+
 2007-07-24  Takeru INOUE  <takeru.inoue _ gmail.com>
 
 	* release 0.13.4:

@@ -20,6 +20,7 @@ sub XML::Atom::Category::element_ns { $XML::Atom::Util::NS_MAP{$XML::Atom::Defau
 
 if ( ! XML::Atom::Client->can('getCategories') ) {
     *XML::Atom::Client::getCategories = sub {
+	warn 'Atompub::Client is recommended for Atom Publishing Protocol.';
 	my $client = shift;
 	my($uri) = @_;
 	return $client->error("Must pass a CategoriesURI before retrieving category document")
@@ -36,7 +37,7 @@ if ( ! XML::Atom::Client->can('getCategories') ) {
 
 if ( ! XML::Atom::Client->can('getCategory') ) {
     *XML::Atom::Client::getCategory = sub {
-	warn 'getCategory is DEPRECATED, and will be removed in the future version';
+	warn 'Atompub::Client is now available for Atom Publishing Protocol.';
 	XML::Atom::Client::getCategories(@_);
     };
 }
@@ -50,7 +51,7 @@ XML::Atom::Categories - Atom Category Document object
 
 =head1 SYNOPSIS
 
-  use XML::Atom::Categories;
+  use XML::Atom::Service;
 
   # use the new namespace, instead of old one 'http://purl.org/atom/app#'
   #$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
@@ -67,12 +68,6 @@ XML::Atom::Categories - Atom Category Document object
 
   ## Get a list of the category elements.
   my @category = $categories->category;
-
-  ## Get category document by using XML::Atom::Client
-  use XML::Atom::Client;
-
-  my $client = XML::Atom::Client->new;
-  my $category = $client->getCategories($category_uri);
 
 
 =head1 DESCRIPTION
@@ -116,7 +111,7 @@ This is treated as a URI, and the Category Document XML will be retrieved from t
 
 =back
 
-=head2 $categories->category
+=head2 $categories->categoryk([ $category ])
 
 If called in scalar context, returns an I<XML::Atom::Category> object
 corresponding to the first I<E<lt>categoryE<gt>> element found in the Category Document.
@@ -143,18 +138,13 @@ the Service Document as a new I<E<lt>categoryE<gt>> element. For example:
 
 =head2 $categories->element_ns
 
-=head2 XML::Atom::Client::getCategories($category_uri)
-
-Retrieves the category document at $category_uri.
-
-Returns an XML::Atom::Categories object representing the category document
-returned from the server.
-
 
 =head1 SEE ALSO
 
 L<XML::Atom>
-L<XML::Atom::Service>
+L<Atompub::Client>
+L<Atompub::Server>
+
 
 =head1 AUTHOR
 
