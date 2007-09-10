@@ -1,14 +1,20 @@
 use strict;
 use warnings;
-use Carp;
-use Test::More tests => 13;
-use Test::NoWarnings;
-use XML::Atom::Entry;
-use XML::Atom::Service;
+#use Data::Dumper; $Data::Dumper::Indent = 1;
+use Test::More tests => 18;
 
-$XML::Atom::DefaultVersion = '1.0';
+use XML::Atom::Entry;
+use XML::Atom::Atompub;
 
 my $entry = XML::Atom::Entry->new;
+
+$entry->alternate_link('http://example.com/foo.html');
+$entry->edit_media_link('http://example.com/foo.png');
+is $entry->alternate_link, 'http://example.com/foo.html';
+is $entry->edit_media_link, 'http://example.com/foo.png';
+
+like $entry->as_xml, qr{<link rel="alternate" href="http://example.com/foo.html"/>};
+like $entry->as_xml, qr{<link rel="edit-media" href="http://example.com/foo.png"/>};
 
 $entry->edited('2007-01-01T00:00:00Z');
 is $entry->edited, '2007-01-01T00:00:00Z';
@@ -31,9 +37,13 @@ my $ns_uri = quotemeta $XML::Atom::Service::DefaultNamespace;
 like $entry->as_xml, qr{<app:edited(?: xmlns:app="$ns_uri")?>2007-01-01T00:00:00Z</app:edited>};
 like $entry->as_xml, qr{<control xmlns="$ns_uri">\s*<draft>yes</draft>\s*</control>}ms;
 
-my $sample = "t/samples/atom-$XML::Atom::DefaultVersion/06.entry";
+
+my $sample = "t/samples/sample.atom";
 $entry = XML::Atom::Entry->new($sample);
 isa_ok $entry, 'XML::Atom::Entry';
+
+is $entry->alternate_link, 'http://example.com/foo.html';
+is $entry->edit_media_link, 'http://example.com/foo.png';
 
 is $entry->title, 'Title';
 is $entry->edited, '2007-01-01T00:00:00Z';

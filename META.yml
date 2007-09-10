@@ -1,6 +1,6 @@
 ---
 name: XML-Atom-Service
-version: 0.14.0
+version: 0.15.0
 author:
   - 'Takeru INOUE <takeru.inoue _ gmail.com>'
 abstract: Atom Service Document object
@@ -9,18 +9,21 @@ resources:
   license: http://dev.perl.org/licenses/
 requires:
   Test::More: 0
+  Test::Perl::Critic: 0
   XML::Atom: 0.25
   version: 0
 provides:
+  XML::Atom::Atompub:
+    file: lib/XML/Atom/Atompub.pm
   XML::Atom::Categories:
     file: lib/XML/Atom/Categories.pm
   XML::Atom::Collection:
     file: lib/XML/Atom/Collection.pm
   XML::Atom::Control:
-    file: lib/XML/Atom/Service.pm
+    file: lib/XML/Atom/Atompub.pm
   XML::Atom::Service:
     file: lib/XML/Atom/Service.pm
-    version: 0.14.0
+    version: 0.15.0
   XML::Atom::Workspace:
     file: lib/XML/Atom/Workspace.pm
 generated_by: Module::Build version 0.2808

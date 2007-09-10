@@ -9,11 +9,15 @@ use XML::Atom::Client;
 use XML::Atom::Workspace;
 use XML::Atom::Collection;
 use XML::Atom::Categories;
+use XML::Atom::Atompub;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.14.0');
+use version; our $VERSION = qv('0.15.0');
 
-our $DefaultNamespace = 'http://purl.org/atom/app#';
+#our $DefaultNamespace = 'http://purl.org/atom/app#';
+our $DefaultNamespace = 'http://www.w3.org/2007/app';
+
+$XML::Atom::DefaultVersion = '1.0';
 
 sub element_name { 'service' }
 
@@ -24,43 +28,10 @@ __PACKAGE__->mk_object_list_accessor(
     'workspaces',
 );
 
-if ( ! XML::Atom::Entry->can('edited') ) {
-    *XML::Atom::Entry::edited = sub {
-	my $self   = shift;
-	my $ns_uri = $XML::Atom::Service::DefaultNamespace;
-	my $app    = XML::Atom::Namespace->new( app => $ns_uri );
-	if (@_) {
-	    $self->set( $app, 'edited', $_[0] );
-	}
-	else {
-	    $self->get( $app, 'edited' );
-	}
-    };
-}
-
-if ( ! XML::Atom::Entry->can('control') ) {
-    XML::Atom::Entry->mk_object_list_accessor(
-	'control' => 'XML::Atom::Control',
-    );
-
-    package XML::Atom::Control;
-
-    use base qw( XML::Atom::Base );
-
-    __PACKAGE__->mk_elem_accessors(qw( draft ));
-
-    sub element_name { 'control' }
-
-    sub element_ns { $XML::Atom::Service::DefaultNamespace }
-}
-
-if ( ! XML::Atom::Content->can('src') ) {
-    XML::Atom::Content->mk_attr_accessors( qw( src ) );
-}
-
 if ( ! XML::Atom::Client->can('getService') ) {
     *XML::Atom::Client::getService = sub {
-	warn 'Atompub::Client is recommended for Atom Publishing Protocol.';
+	warn 'XML::Atom::Client->getService is DEPRECATED and '
+	     . 'moved to Atompub::Client->getService';
 	my $client = shift;
 	my($uri) = @_;
 	return $client->error("Must pass a ServiceURI before retrieving service document")
@@ -82,15 +53,24 @@ __END__
 
 XML::Atom::Service - Atom Service Document object
 
+
+=head1 COMPATIBILITY ISSUES
+
+L<XML::Atom::Service> has B<changed the default namespace> since v0.15.0.
+The new namespaces are 'http://www.w3.org/2005/Atom' and 'http://www.w3.org/2007/app'.
+
+See L<NAMESPACES> in details.
+
+
 =head1 SYNOPSIS
 
   use XML::Atom::Service;
 
-  # use the new namespace, instead of old one 'http://purl.org/atom/app#'
-  #$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
+  my $category = XML::Atom::Category->new;
+  $category->term('joke');
+  $category->scheme('http://example.org/extra-cats/');
 
   my $categories = XML::Atom::Categories->new;
-  $categories->href('http://example.com/cats/forMain.cats');
   $categories->add_category($category);
 
   my $collection = XML::Atom::Collection->new;
@@ -108,62 +88,51 @@ XML::Atom::Service - Atom Service Document object
 
   my $xml = $service->as_xml;
 
-  ## Get lists of the workspace, collection, and categories elements.
-  my @workspace = $service->workspace;
-  my @collection = $workspace[0]->collection;
+  # Get lists of the workspace, collection, and categories elements
+  my @workspace = $service->workspaces;
+  my @collection = $workspace[0]->collections;
   my @categories = $collection[0]->categories;
-
-
-  ## Some elements introduced by the Atom Publishing Protocol are 
-  ## imported into XML::Atom .
-  use XML::Atom::Entry;
-
-  my $entry = XML::Atom::Entry->new;
-
-  ## <app:edited>2007-01-01T00:00:00Z</app:edited>
-  $entry->edited('2007-01-01T00:00:00Z');
-
-  ## <app:control><app:draft>yes</app:draft></app:control>
-  my $control = XML::Atom::Control->new;
-  $control->draft('yes');
-  $entry->control($control);
-
-  ## <atom:content src="..."/>
-  my $content = XML::Atom::Content->new( Version => 1.0 );
-  $content->src('http://example.com/foo.png');
-  $content->type('image/png');
-  $entry->content($content);
 
 
 =head1 DESCRIPTION
 
-For authoring to commence, a client needs to first discover the 
-capabilities and locations of the available collections.  
-Service Documents are designed to support this discovery process.
-They describe the location and capabilities of one or more Collection.
+The Atom Publishing Protocol (Atompub) is a protocol for publishing and 
+editing Web resources described at
+L<http://www.ietf.org/internet-drafts/draft-ietf-atompub-protocol-17.txt>.
 
-The Service Document is defined in "The Atom Publishing Protocol," 
-IETF Internet-Draft.
+L<XML::Atom::Service> is an Service Document implementation.
+In the Atom Publishing Protocol, a client needs to first discover the 
+capabilities and locations of Collections.
+The Service Document is designed to support this discovery process.
+The document describes the location and capabilities of Collections.
+
+The Atom Publishing Protocol introduces some new XML elements, such as
+I<app:edited> and I<app:draft>, which are imported into L<XML::Atom>.
+See L<XML::Atom::Atompub> in detail.
+
+This module was tested in InteropTokyo2007
+L<http://intertwingly.net/wiki/pie/July2007InteropTokyo>, 
+and interoperated with other implementations.
 
 
 =head1 METHODS
 
 =head2 XML::Atom::Service->new([ $stream ])
 
-Creates a new Service Document object, and if I<$stream> is supplied, fills 
-it with the data specified by I<$stream>.
+Creates a new Service Document object, and if $stream is supplied, fills 
+it with the data specified by $stream.
 
-Automatically handles autodiscovery if I<$stream> is a URI (see below).
+Automatically handles autodiscovery if $stream is a URI (see below).
 
-Returns the new I<XML::Atom::Service> object. On failure, returns C<undef>.
+Returns the new L<XML::Atom::Service> object. On failure, returns C<undef>.
 
-I<$stream> can be any one of the following:
+$stream can be any one of the following:
 
 =over 4
 
 =item * Reference to a scalar
 
-This is treated as the XML body of the feed.
+This is treated as the XML body of the Service Document.
 
 =item * Scalar
 
@@ -181,16 +150,17 @@ This is treated as a URI, and the Service Document XML will be retrieved from th
 
 =head2 $service->workspace
 
-If called in scalar context, returns an I<XML::Atom::Workspace> object
-corresponding to the first I<E<lt>workspaceE<gt>> element found in the Service Document.
+If called in scalar context, returns an L<XML::Atom::Workspace> object
+corresponding to the first "app:workspace" element found in the Service 
+Document.
 
-If called in list context, returns a list of I<XML::Atom::Workspace> objects
-corresponding to all of the I<E<lt>workspaceE<gt>> elements found in the Service Document.
+If called in list context, returns a list of L<XML::Atom::Workspace> objects
+corresponding to all of the app:workspace elements found in the Service Document.
 
 =head2 $service->add_workspace($workspace)
 
-Adds the workspace I<$workspace>, which must be an I<XML::Atom::Workspace> object, to
-the Service Document as a new I<E<lt>workspaceE<gt>> element. For example:
+Adds the workspace $workspace, which must be an L<XML::Atom::Workspace> object, to
+the Service Document as a new app:workspace element. For example:
 
     my $workspace = XML::Atom::Workspace->new;
     $workspace->title('Foo Bar');
@@ -201,44 +171,23 @@ the Service Document as a new I<E<lt>workspaceE<gt>> element. For example:
 =head2 $service->element_ns
 
 
-=head1 METHODS of XML::Atom
+=head1 NAMESPACES
 
-Some elements are introduced by the Atom Publishing Protocol, and they 
-are imported into XML::Atom .
+By default, L<XML::Atom::Service> will create entities using the new
+Atom namespaces, 'http://www.w3.org/2005/Atom' and 'http://www.w3.org/2007/app'.
+In order to use old ones, you can set them by setting global variables like:
 
-=head2 $entry->control([ $control ])
-
-Returns an XML::Atom::Control object representing the control of the 
-entry, or "undef" if there is no author information present.
-
-If $control is supplied, it should be an XML::Atom::Control object 
-representing the control. For example:
-
-    my $control = XML::Atom::Control->new;
-    $control->draft('yes');
-    $entry->control($control);
-
-=head2 $entry->edited
-
-=head2 $content->src
-
-
-=head1 USING NEW NAMESPACE
-
-By default, XML::Atom::Service and other classes (Workspace, Collection and 
-Categories) will create entities using old namespace, 'http://purl.org/atom/app#'.
-In order to use the new namespace, you can set namespace by setting 
-$XML::Atom::Service::DefaultNamespace global variable like:
-
+  use XML::Atom;
   use XML::Atom::Service;
-  $XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
+  $XML::Atom::DefaultVersion = '0.3';   # 'http://purl.org/atom/ns#'
+  $XML::Atom::Service::DefaultNamespace = 'http://purl.org/atom/app#';
 
 
 =head1 SEE ALSO
 
 L<XML::Atom>
-L<Atompub::Client>
-L<Atompub::Server>
+L<Atompub>
+L<Catalyst::Controller::Atompub>
 
 
 =head1 AUTHOR

@@ -1,13 +1,10 @@
 use strict;
 use warnings;
-use Carp;
-use Test::More tests => 17;
-use Test::NoWarnings;;
-use XML::Atom::Workspace;
-use XML::Atom::Collection;
+#use Data::Dumper; $Data::Dumper::Indent = 1;
+use Test::More tests => 16;
 
-$XML::Atom::DefaultVersion = '1.0';
-$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
+use XML::Atom::Collection;
+use XML::Atom::Workspace;
 
 my $workspace = XML::Atom::Workspace->new;
 isa_ok $workspace, 'XML::Atom::Workspace';

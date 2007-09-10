@@ -1,12 +1,10 @@
 use strict;
 use warnings;
-use Carp;
-use Test::More tests => 18;
-use Test::NoWarnings;;
-use XML::Atom::Service;
+#use Data::Dumper; $Data::Dumper::Indent = 1;
+use Test::More tests => 17;
 
-$XML::Atom::DefaultVersion = '1.0';
-$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
+use XML::Atom;
+use XML::Atom::Service;
 
 my $service = XML::Atom::Service->new;
 isa_ok $service, 'XML::Atom::Service';
@@ -42,7 +40,7 @@ like $xml, qr!<atom:title xmlns:atom="$ns_uri">Foo Bar</atom:title>!;
 like $xml, qr!<atom:title xmlns:atom="$ns_uri">Baz Quux</atom:title>!;
 like $xml, qr!</service>$!;
 
-my $sample = "t/samples/atom-$XML::Atom::DefaultVersion/04.atomsvc";
+my $sample = "t/samples/sample.atomsvc";
 $service = XML::Atom::Service->new($sample);
 isa_ok $service, 'XML::Atom::Service';
 

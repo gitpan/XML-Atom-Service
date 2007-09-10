@@ -1,13 +1,10 @@
 use strict;
 use warnings;
-use Carp;
-use Test::More tests => 41;
-use Test::NoWarnings;;
+#use Data::Dumper; $Data::Dumper::Indent = 1;
+use Test::More tests => 40;
+
 use XML::Atom::Categories;
 use XML::Atom::Category;
-
-$XML::Atom::DefaultVersion = '1.0';
-$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
 
 my $categories = XML::Atom::Categories->new;
 isa_ok $categories, 'XML::Atom::Categories';
@@ -71,7 +68,7 @@ like $xml, qr!term="serious"!;
 
 like $xml, qr!</categories>$!;
 
-my $sample = "t/samples/atom-$XML::Atom::DefaultVersion/01.atomcat";
+my $sample = "t/samples/sample.atomcat";
 $categories = XML::Atom::Categories->new($sample);
 isa_ok $categories, 'XML::Atom::Categories';
 

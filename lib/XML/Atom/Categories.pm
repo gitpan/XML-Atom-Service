@@ -20,7 +20,8 @@ sub XML::Atom::Category::element_ns { $XML::Atom::Util::NS_MAP{$XML::Atom::Defau
 
 if ( ! XML::Atom::Client->can('getCategories') ) {
     *XML::Atom::Client::getCategories = sub {
-	warn 'Atompub::Client is recommended for Atom Publishing Protocol.';
+	warn 'XML::Atom::Client->getCategories is DEPRECATED and '
+	     . 'moved to Atompub::Client->getCategories';
 	my $client = shift;
 	my($uri) = @_;
 	return $client->error("Must pass a CategoriesURI before retrieving category document")
@@ -37,7 +38,8 @@ if ( ! XML::Atom::Client->can('getCategories') ) {
 
 if ( ! XML::Atom::Client->can('getCategory') ) {
     *XML::Atom::Client::getCategory = sub {
-	warn 'Atompub::Client is now available for Atom Publishing Protocol.';
+	warn 'XML::Atom::Client->getCategory is DEPRECATED and '
+	     . 'moved to Atompub::Client->getCategories';
 	XML::Atom::Client::getCategories(@_);
     };
 }
@@ -53,20 +55,16 @@ XML::Atom::Categories - Atom Category Document object
 
   use XML::Atom::Service;
 
-  # use the new namespace, instead of old one 'http://purl.org/atom/app#'
-  #$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
-
   my $category = XML::Atom::Category->new;
-  $category->scheme('http://example.org/extra-cats/');
   $category->term('joke');
+  $category->scheme('http://example.org/extra-cats/');
 
   my $categories = XML::Atom::Categories->new;
-  $categories->href('http://example.com/cats/forMain.cats');
   $categories->add_category($category);
 
   my $xml = $categories->as_xml;
 
-  ## Get a list of the category elements.
+  # Get a list of the category elements.
   my @category = $categories->category;
 
 
@@ -82,47 +80,50 @@ IETF Internet-Draft.
 
 =head2 XML::Atom::Categories->new([ $stream ])
 
-Creates a new Category Document object, and if I<$stream> is supplied, fills 
-it with the data specified by I<$stream>.
+Creates a new Category Document object, and if $stream is supplied, fills 
+it with the data specified by $stream.
 
-Automatically handles autodiscovery if I<$stream> is a URI (see below).
+Automatically handles autodiscovery if $stream is a URI (see below).
 
-Returns the new I<XML::Atom::Categories> object. On failure, returns C<undef>.
+Returns the new L<XML::Atom::Categories> object. On failure, returns C<undef>.
 
-I<$stream> can be any one of the following:
+$stream can be any one of the following:
 
 =over 4
 
 =item * Reference to a scalar
 
-This is treated as the XML body of the feed.
+This is treated as the XML body of the Category Document.
 
 =item * Scalar
 
-This is treated as the name of a file containing the Category Document XML.
+This is treated as the name of a file containing the Category Document 
+XML.
 
 =item * Filehandle
 
-This is treated as an open filehandle from which the Category Document XML can be read.
+This is treated as an open filehandle from which the Category Document 
+XML can be read.
 
 =item * URI object
 
-This is treated as a URI, and the Category Document XML will be retrieved from the URI.
+This is treated as a URI, and the Category Document XML will be retrieved 
+from the URI.
 
 =back
 
 =head2 $categories->categoryk([ $category ])
 
-If called in scalar context, returns an I<XML::Atom::Category> object
-corresponding to the first I<E<lt>categoryE<gt>> element found in the Category Document.
+If called in scalar context, returns an L<XML::Atom::Category> object
+corresponding to the first "app:category" element found in the Category Document.
 
-If called in list context, returns a list of I<XML::Atom::Category> objects
-corresponding to all of the I<E<lt>categoryE<gt>> elements found in the Service Document.
+If called in list context, returns a list of L<XML::Atom::Category> objects
+corresponding to all of the "app:category" elements found in the Service Document.
 
 =head2 $service->add_category($category)
 
-Adds the category I<$category>, which must be an I<XML::Atom::Category> object, to
-the Service Document as a new I<E<lt>categoryE<gt>> element. For example:
+Adds the category $category, which must be an L<XML::Atom::Category> object, to
+the Service Document as a new "app:category" element. For example:
 
     my $category = XML::Atom::Category->new;
     $category->term('joke');
@@ -142,8 +143,8 @@ the Service Document as a new I<E<lt>categoryE<gt>> element. For example:
 =head1 SEE ALSO
 
 L<XML::Atom>
-L<Atompub::Client>
-L<Atompub::Server>
+L<XML::Atom::Service>
+L<Atompub>
 
 
 =head1 AUTHOR

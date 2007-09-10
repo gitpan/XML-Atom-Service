@@ -30,7 +30,7 @@ __PACKAGE__->mk_object_list_accessor(
     'categories' => 'XML::Atom::Categories',
 );
 
-## accessors to text elements, multiple which there can be
+# accessors to text elements, multiple which there can be
 if ( ! XML::Atom::Base->can('mk_elem_list_accessor') ) {
     use XML::Atom::Util qw( childlist create_element );
 
@@ -107,7 +107,7 @@ XML::Atom::Collection - Collection object
   $collection->title('My Blog Entries');
   $collection->categories($categories);
 
-  ## Get a list of the categories elements.
+  # Get a list of the categories elements
   my @categories = $collection->categories;
 
 =head1 METHODS

@@ -1,15 +1,11 @@
 use strict;
 use warnings;
-use Carp;
-use Test::More tests => 17;
-use Test::NoWarnings;
-use XML::Atom;
-use XML::Atom::Collection;
+#use Data::Dumper; $Data::Dumper::Indent = 1;
+use Test::More tests => 16;
+
 use XML::Atom::Categories;
 use XML::Atom::Category;
-
-$XML::Atom::DefaultVersion = '1.0';
-$XML::Atom::Service::DefaultNamespace = 'http://www.w3.org/2007/app';
+use XML::Atom::Collection;
 
 my $collection = XML::Atom::Collection->new;
 isa_ok $collection, 'XML::Atom::Collection';

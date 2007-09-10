@@ -51,8 +51,8 @@ XML::Atom::Workspace - Workspace object
   $workspace->title('Main Site');
   $workspace->add_collection($collection);
 
-  ## Get lists of the collection and categories elements.
-  my @collection = $workspace->collection;
+  # Get lists of the collection and categories elements
+  my @collection = $workspace->collections;
   my @categories = $collection[0]->categories;
 
 =head1 METHODS

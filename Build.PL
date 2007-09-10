@@ -10,6 +10,8 @@ my $builder = Module::Build->new(
     requires => {
         'Test::More' => 0,
         'version'    => 0,
+
+        'Test::Perl::Critic' => 0,
         'XML::Atom'  => 0.25,
     },
     add_to_cleanup      => [ 'XML-Atom-Service-*' ],

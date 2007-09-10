@@ -1,3 +1,17 @@
+2007-09-10  Takeru INOUE  <takeru.inoue _ gmail.com>
+
+	* release 0.15.0:
+	* XML/Atom/Service.pm
+	- change the default namespaces to new ones,
+	  'http://purl.org/atom/ns#' and 'http://www.w3.org/2007/app'
+	* XML/Atom/Atompub.pm
+	- move extension methods of XML::Atom::Entry from
+	  XML/Atom/Service.pm
+	- add short-cut for link/@href
+	* XML/Atom/Service.pm, XML/Atom/Categories.pm
+	- fix document bugs
+
+
 2007-08-12  Takeru INOUE  <takeru.inoue _ gmail.com>
 
 	* release 0.14.0:
