@@ -1,3 +1,9 @@
+2007-09-12  Takeru INOUE  <takeru.inoue _ gmail.com>
+
+	* release 0.15.1:
+	* XML/Atom/Atompub.pm
+	- avoid redefining subroutines for XML::Atom::Thing
+
 2007-09-10  Takeru INOUE  <takeru.inoue _ gmail.com>
 
 	* release 0.15.0:

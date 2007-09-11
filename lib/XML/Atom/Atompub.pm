@@ -22,9 +22,7 @@ if ( ! XML::Atom::Entry->can('edited') ) {
 }
 
 if ( ! XML::Atom::Entry->can('control') ) {
-    XML::Atom::Entry->mk_object_list_accessor(
-	'control' => 'XML::Atom::Control',
-    );
+    XML::Atom::Entry->mk_object_list_accessor( 'control' => 'XML::Atom::Control' );
 
     package XML::Atom::Control;
 
@@ -41,29 +39,35 @@ if ( ! XML::Atom::Content->can('src') ) {
     XML::Atom::Content->mk_attr_accessors( qw( src ) );
 }
 
-*XML::Atom::Thing::alternate_link = sub {
-    my $atom = shift;
-    my @hrefs;
-    if (@_) {
-	my @links1 = grep { $_->rel && $_->rel ne 'alternate'} $atom->links;
-	my @links2 =  map { my $link = XML::Atom::Link->new;
-			    $link->rel('alternate');
-			    $link->href($_);
-			    $link }
-	                    @_;
-	$atom->link( @links1, @links2 );
-	@hrefs = @_;
-    }
-    else {
-	@hrefs = map { $_->href } grep { ! $_->rel || $_->rel eq 'alternate' } $atom->links;
-    }
-    return wantarray ? @hrefs : $hrefs[0];
-};
+if ( ! XML::Atom::Thing->can('alternate_link') ) {
+    *XML::Atom::Thing::alternate_link = sub {
+	my $atom = shift;
+	my @hrefs;
+	if (@_) {
+	    my @links1 = grep { $_->rel && $_->rel ne 'alternate'} $atom->links;
+	    my @links2 =  map { my $link = XML::Atom::Link->new;
+				$link->rel('alternate');
+				$link->href($_);
+				$link }
+	                      @_;
+	    $atom->link( @links1, @links2 );
+	    @hrefs = @_;
+	}
+	else {
+	    @hrefs = map { $_->href } grep { ! $_->rel || $_->rel eq 'alternate' } $atom->links;
+	}
+	return wantarray ? @hrefs : $hrefs[0];
+    };
+}
 
 for my $rel qw( self edit edit-media related enclosure via first previous next last ) {
     no strict 'refs'; ## no critic
+
     my $method = join '_', $rel, 'link';
     $method =~ s/-/_/g;
+
+    next if XML::Atom::Thing->can( $method );
+
     *{"XML::Atom::Thing::$method"} = sub {
 	my $atom = shift;
 	my @hrefs;
