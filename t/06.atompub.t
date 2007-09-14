@@ -13,8 +13,8 @@ $entry->edit_media_link('http://example.com/foo.png');
 is $entry->alternate_link, 'http://example.com/foo.html';
 is $entry->edit_media_link, 'http://example.com/foo.png';
 
-like $entry->as_xml, qr{<link rel="alternate" href="http://example.com/foo.html"/>};
-like $entry->as_xml, qr{<link rel="edit-media" href="http://example.com/foo.png"/>};
+like $entry->as_xml, qr{<link (?:xmlns="http://www.w3.org/2005/Atom" )?rel="alternate" href="http://example.com/foo.html"/>};
+like $entry->as_xml, qr{<link (?:xmlns-"http://www.w3.org/2005/Atom" )?rel="edit-media" href="http://example.com/foo.png"/>};
 
 $entry->edited('2007-01-01T00:00:00Z');
 is $entry->edited, '2007-01-01T00:00:00Z';
@@ -35,7 +35,7 @@ $entry->content($content);
 
 my $ns_uri = quotemeta $XML::Atom::Service::DefaultNamespace;
 like $entry->as_xml, qr{<app:edited(?: xmlns:app="$ns_uri")?>2007-01-01T00:00:00Z</app:edited>};
-like $entry->as_xml, qr{<control xmlns="$ns_uri">\s*<draft>yes</draft>\s*</control>}ms;
+like $entry->as_xml, qr{<(?:app:)?control xmlns="$ns_uri">\s*<(?:app:)?draft>yes</(?:app:)?draft>\s*</(?:app:)?control>}ms;
 
 
 my $sample = "t/samples/sample.atom";
