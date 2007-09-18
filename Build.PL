@@ -12,7 +12,7 @@ my $builder = Module::Build->new(
         'version'    => 0,
 
         'Test::Perl::Critic' => 0,
-        'XML::Atom'  => 0.25,
+        'XML::Atom'  => 0.27,
     },
     add_to_cleanup      => [ 'XML-Atom-Service-*' ],
 );

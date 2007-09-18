@@ -4,7 +4,7 @@ use warnings;
 use strict;
 use Carp;
 
-use XML::Atom;
+use XML::Atom 0.27;
 use XML::Atom::Client;
 use XML::Atom::Workspace;
 use XML::Atom::Collection;
@@ -12,7 +12,7 @@ use XML::Atom::Categories;
 use XML::Atom::Atompub;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.15.3');
+use version; our $VERSION = qv('0.15.4');
 
 #our $DefaultNamespace = 'http://purl.org/atom/app#';
 our $DefaultNamespace = 'http://www.w3.org/2007/app';
