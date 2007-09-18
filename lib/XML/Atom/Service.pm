@@ -12,7 +12,7 @@ use XML::Atom::Categories;
 use XML::Atom::Atompub;
 use base qw( XML::Atom::Thing );
 
-use version; our $VERSION = qv('0.15.2');
+use version; our $VERSION = qv('0.15.3');
 
 #our $DefaultNamespace = 'http://purl.org/atom/app#';
 our $DefaultNamespace = 'http://www.w3.org/2007/app';

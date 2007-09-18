@@ -14,7 +14,7 @@ is $entry->alternate_link, 'http://example.com/foo.html';
 is $entry->edit_media_link, 'http://example.com/foo.png';
 
 like $entry->as_xml, qr{<link (?:xmlns="http://www.w3.org/2005/Atom" )?rel="alternate" href="http://example.com/foo.html"/>};
-like $entry->as_xml, qr{<link (?:xmlns-"http://www.w3.org/2005/Atom" )?rel="edit-media" href="http://example.com/foo.png"/>};
+like $entry->as_xml, qr{<link (?:xmlns="http://www.w3.org/2005/Atom" )?rel="edit-media" href="http://example.com/foo.png"/>};
 
 $entry->edited('2007-01-01T00:00:00Z');
 is $entry->edited, '2007-01-01T00:00:00Z';

@@ -1,3 +1,9 @@
+2007-09-18  Takeru INOUE  <takeru.inoue _ gmail.com>
+
+	* release 0.15.3:
+	* t/06.atompub
+	- fix a bug
+
 2007-09-14  Takeru INOUE  <takeru.inoue _ gmail.com>
 
 	* release 0.15.2:
