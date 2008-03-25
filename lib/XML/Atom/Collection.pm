@@ -6,88 +6,84 @@ use Carp;
 
 use XML::Atom;
 use XML::Atom::Service;
-use base qw( XML::Atom::Base );
+use base qw(XML::Atom::Base);
 
-__PACKAGE__->mk_attr_accessors(qw( href ));
+__PACKAGE__->mk_attr_accessors(qw(href));
 
 sub element_name { 'collection' }
 
 sub element_ns { $XML::Atom::Service::DefaultNamespace }
 
 sub title {
-    my $self   = shift;
+    my($self, $title) = @_;
     my $ns_uri = $XML::Atom::Util::NS_MAP{$XML::Atom::DefaultVersion};
-    my $atom   = XML::Atom::Namespace->new( atom => $ns_uri );
-    if (@_) {
-	$self->set( $atom, 'title', $_[0] );
+    my $atom   = XML::Atom::Namespace->new(atom => $ns_uri);
+    if (defined $title) {
+        $self->set($atom, 'title', $title);
     }
     else {
-	$self->get( $atom, 'title' );
+        $self->get($atom, 'title');
     }
 }
 
-__PACKAGE__->mk_object_list_accessor(
-    'categories' => 'XML::Atom::Categories',
-);
+__PACKAGE__->mk_object_list_accessor('categories' => 'XML::Atom::Categories');
 
 # accessors to text elements, multiple which there can be
-if ( ! XML::Atom::Base->can('mk_elem_list_accessor') ) {
-    use XML::Atom::Util qw( childlist create_element );
+unless (XML::Atom::Base->can('mk_elem_list_accessor')) {
+    use XML::Atom::Util qw(childlist create_element);
 
     *XML::Atom::Base::mk_elem_list_accessor = sub {
-	my $class = shift;
-	my($name, $moniker) = @_;
+        my($class, $name, $moniker) = @_;
 
-	no strict 'refs'; ## no critic
+        no strict 'refs'; ## no critic
 
-	*{"$class\::$name"} = sub {
-	    my $obj = shift;
+        *{"$class\::$name"} = sub {
+            my($obj, @args) = @_;
+            my $ns_uri = $class->element_ns || $obj->ns;
+            if (@args) {
+                # setter: clear existent elements first
+                my @elem = childlist($obj->elem, $ns_uri, $name);
+                for my $el (@elem) {
+                    $obj->elem->removeChild($el);
+                }
 
-	    my $ns_uri = $class->element_ns || $obj->ns;
-	    if (@_) {
-		# setter: clear existent elements first
-		my @elem = childlist($obj->elem, $ns_uri, $name);
-		for my $el (@elem) {
-		    $obj->elem->removeChild($el);
-		}
+                # add the new elements for each
+                my $adder = "add_$name";
+                for my $add_elem (@args) {
+                    $obj->$adder($add_elem);
+                }
+            }
+            else {
+                # getter:
+                my @children = map { $_->textContent } childlist( $obj->elem, $ns_uri, $name );
+                wantarray ? @children : $children[0];
+            }
+        };
 
-		# add the new elements for each
-		my $adder = "add_$name";
-		for my $add_elem (@_) {
-		    $obj->$adder($add_elem);
-		}
-	    } else {
-		# getter:
-		my @children = map { $_->textContent } childlist( $obj->elem, $ns_uri, $name );
-		wantarray ? @children : $children[0];
-	    }
-	};
+        if ($moniker) {
+            *{"$class\::$moniker"} = sub {
+                my($obj, @args) = @_;
+                if (@args) {
+                    return $obj->$name(@args);
+                }
+                else {
+                    my @obj = $obj->$name;
+                    return wantarray ? @obj : \@obj;
+                }
+            };
+        }
 
-	if ($moniker) {
-	    *{"$class\::$moniker"} = sub {
-		my $obj = shift;
-		if (@_) {
-		    return $obj->$name(@_);
-		} else {
-		    my @obj = $obj->$name;
-		    return wantarray ? @obj : \@obj;
-		}
-	    };
-	}
-	
-	*{"$class\::add_$name"} = sub {
-	    my $obj = shift;
-	    my($stuff) = @_;
-
-	    my $ns_uri = $class->element_ns || $obj->ns;
-	    my $elem = create_element( $ns_uri, 'accept' );
-	    $elem->appendText($stuff);
-	    $obj->elem->appendChild($elem);
-	};
+        *{"$class\::add_$name"} = sub {
+            my($obj, $stuff) = @_;
+            my $ns_uri = $class->element_ns || $obj->ns;
+            my $elem = create_element($ns_uri, 'accept');
+            $elem->appendText($stuff);
+            $obj->elem->appendChild($elem);
+        };
     };
 }
 
-__PACKAGE__->mk_elem_list_accessor( 'accept', 'accepts' );
+__PACKAGE__->mk_elem_list_accessor('accept', 'accepts');
 
 1;
 __END__

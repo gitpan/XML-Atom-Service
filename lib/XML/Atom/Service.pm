@@ -5,14 +5,13 @@ use strict;
 use Carp;
 
 use XML::Atom 0.27;
-use XML::Atom::Client;
 use XML::Atom::Workspace;
 use XML::Atom::Collection;
 use XML::Atom::Categories;
 use XML::Atom::Atompub;
-use base qw( XML::Atom::Thing );
+use base qw(XML::Atom::Thing);
 
-use version; our $VERSION = qv('0.15.4');
+use version; our $VERSION = qv('0.16.0');
 
 #our $DefaultNamespace = 'http://purl.org/atom/app#';
 our $DefaultNamespace = 'http://www.w3.org/2007/app';
@@ -23,28 +22,7 @@ sub element_name { 'service' }
 
 sub element_ns { $DefaultNamespace }
 
-__PACKAGE__->mk_object_list_accessor(
-    'workspace' => 'XML::Atom::Workspace',
-    'workspaces',
-);
-
-if ( ! XML::Atom::Client->can('getService') ) {
-    *XML::Atom::Client::getService = sub {
-	warn 'XML::Atom::Client->getService is DEPRECATED and '
-	     . 'moved to Atompub::Client->getService';
-	my $client = shift;
-	my($uri) = @_;
-	return $client->error("Must pass a ServiceURI before retrieving service document")
-	    unless $uri;
-	my $req = HTTP::Request->new(GET => $uri);
-	my $res = $client->make_request($req);
-	return $client->error("Error on GET $uri: " . $res->status_line)
-	    unless $res->code == 200;
-	my $service = XML::Atom::Service->new(Stream => \$res->content)
-	    or return $client->error(XML::Atom::Service->errstr);
-	$service;
-    };
-}
+__PACKAGE__->mk_object_list_accessor('workspace' => 'XML::Atom::Workspace', 'workspaces');
 
 1;
 __END__

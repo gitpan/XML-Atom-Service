@@ -7,84 +7,84 @@ use XML::Atom::Entry;
 use XML::Atom::Service;
 use XML::Atom::Thing;
 
-if ( ! XML::Atom::Entry->can('edited') ) {
+unless (XML::Atom::Entry->can('edited')) {
     *XML::Atom::Entry::edited = sub {
-	my $self   = shift;
-	my $ns_uri = $XML::Atom::Service::DefaultNamespace;
-	my $app    = XML::Atom::Namespace->new( app => $ns_uri );
-	if (@_) {
-	    $self->set( $app, 'edited', $_[0] );
-	}
-	else {
-	    $self->get( $app, 'edited' );
-	}
+        my($self, $edited) = @_;
+        my $ns_uri = $XML::Atom::Service::DefaultNamespace;
+        my $app    = XML::Atom::Namespace->new(app => $ns_uri);
+        if ($edited) {
+            $self->set($app, 'edited', $edited);
+        }
+        else {
+            $self->get($app, 'edited');
+        }
     };
 }
 
-if ( ! XML::Atom::Entry->can('control') ) {
-    XML::Atom::Entry->mk_object_list_accessor( 'control' => 'XML::Atom::Control' );
+unless (XML::Atom::Entry->can('control')) {
+    XML::Atom::Entry->mk_object_list_accessor('control' => 'XML::Atom::Control');
 
     package XML::Atom::Control;
 
-    use base qw( XML::Atom::Base );
+    use base qw(XML::Atom::Base);
 
-    __PACKAGE__->mk_elem_accessors(qw( draft ));
+    __PACKAGE__->mk_elem_accessors(qw(draft));
 
     sub element_name { 'control' }
 
     sub element_ns { $XML::Atom::Service::DefaultNamespace }
 }
 
-if ( ! XML::Atom::Content->can('src') ) {
-    XML::Atom::Content->mk_attr_accessors( qw( src ) );
+unless (XML::Atom::Content->can('src')) {
+    XML::Atom::Content->mk_attr_accessors(qw(src));
 }
 
-if ( ! XML::Atom::Thing->can('alternate_link') ) {
+unless (XML::Atom::Thing->can('alternate_link')) {
     *XML::Atom::Thing::alternate_link = sub {
-	my $atom = shift;
-	my @hrefs;
-	if (@_) {
-	    my @links1 = grep { $_->rel && $_->rel ne 'alternate'} $atom->links;
-	    my @links2 =  map { my $link = XML::Atom::Link->new;
-				$link->rel('alternate');
-				$link->href($_);
-				$link }
-	                      @_;
-	    $atom->link( @links1, @links2 );
-	    @hrefs = @_;
-	}
-	else {
-	    @hrefs = map { $_->href } grep { ! $_->rel || $_->rel eq 'alternate' } $atom->links;
-	}
-	return wantarray ? @hrefs : $hrefs[0];
+        my($atom, @args) = @_;
+        my @hrefs;
+        if (@args) {
+            my @links1 = grep { $_->rel && $_->rel ne 'alternate'} $atom->links;
+            my @links2 =  map { my $link = XML::Atom::Link->new;
+                                $link->rel('alternate');
+                                $link->href($_);
+                                $link }
+                              @args;
+            $atom->link( @links1, @links2 );
+            @hrefs = @_;
+        }
+        else {
+            @hrefs = map { $_->href } grep { ! $_->rel || $_->rel eq 'alternate' } $atom->links;
+        }
+        wantarray ? @hrefs : $hrefs[0];
     };
 }
 
-for my $rel qw( self edit edit-media related enclosure via first previous next last ) {
+for my $rel qw(self edit edit-media related enclosure via first previous next last) {
     no strict 'refs'; ## no critic
 
     my $method = join '_', $rel, 'link';
     $method =~ s/-/_/g;
 
-    next if XML::Atom::Thing->can( $method );
+    next if XML::Atom::Thing->can($method);
 
     *{"XML::Atom::Thing::$method"} = sub {
-	my $atom = shift;
-	my @hrefs;
-	if (@_) {
-	    my @links1 = grep { ! $_->rel || $_->rel ne $rel } $atom->links;
-	    my @links2 =  map { my $link = XML::Atom::Link->new;
-				$link->rel( $rel );
-				$link->href($_);
-				$link }
-	                        @_;
-	    $atom->link( @links1, @links2 );
-	    @hrefs = @_;
-	}
-	else {
-	    @hrefs = map { $_->href } grep { $_->rel && $_->rel eq $rel } $atom->links;
-	}
-	return wantarray ? @hrefs : $hrefs[0];
+        my($atom, @args) = @_;
+        my @hrefs;
+        if (@args) {
+            my @links1 = grep { ! $_->rel || $_->rel ne $rel } $atom->links;
+            my @links2 =  map { my $link = XML::Atom::Link->new;
+                                $link->rel( $rel );
+                                $link->href($_);
+                                $link }
+                              @args;
+            $atom->link( @links1, @links2 );
+            @hrefs = @_;
+        }
+        else {
+            @hrefs = map { $_->href } grep { $_->rel && $_->rel eq $rel } $atom->links;
+        }
+        wantarray ? @hrefs : $hrefs[0];
     };
 }
 

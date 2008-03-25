@@ -6,28 +6,25 @@ use Carp;
 
 use XML::Atom;
 use XML::Atom::Service;
-use base qw( XML::Atom::Base );
+use base qw(XML::Atom::Base);
 
 sub element_name { 'workspace' }
 
 sub element_ns { $XML::Atom::Service::DefaultNamespace }
 
 sub title {
-    my $self   = shift;
+    my($self, $title) = @_;
     my $ns_uri = $XML::Atom::Util::NS_MAP{$XML::Atom::DefaultVersion};
-    my $atom   = XML::Atom::Namespace->new( atom => $ns_uri );
-    if (@_) {
-	$self->set( $atom, 'title', $_[0] );
+    my $atom   = XML::Atom::Namespace->new(atom => $ns_uri);
+    if (defined $title) {
+	$self->set( $atom, 'title', $title );
     }
     else {
 	$self->get( $atom, 'title' );
     }
 }
 
-__PACKAGE__->mk_object_list_accessor(
-    'collection' => 'XML::Atom::Collection',
-    'collections',
-);
+__PACKAGE__->mk_object_list_accessor('collection' => 'XML::Atom::Collection', 'collections');
 
 1;
 __END__
