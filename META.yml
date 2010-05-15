@@ -1,17 +1,18 @@
 ---
-name: XML-Atom-Service
-version: 0.16.0
+abstract: 'Atom Service Document object'
 author:
   - 'Takeru INOUE <takeru.inoue _ gmail.com>'
-abstract: Atom Service Document object
-license: perl
-resources:
-  license: http://dev.perl.org/licenses/
-requires:
+build_requires:
   Test::More: 0
-  Test::Perl::Critic: 0
-  XML::Atom: 0.27
-  version: 0
+  Test::NoWarnings: 0
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3607'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: XML-Atom-Service
 provides:
   XML::Atom::Atompub:
     file: lib/XML/Atom/Atompub.pm
@@ -23,10 +24,12 @@ provides:
     file: lib/XML/Atom/Atompub.pm
   XML::Atom::Service:
     file: lib/XML/Atom/Service.pm
-    version: 0.16.0
+    version: v0.16.1
   XML::Atom::Workspace:
     file: lib/XML/Atom/Workspace.pm
-generated_by: Module::Build version 0.2808
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.2.html
-  version: 1.2
+requires:
+  XML::Atom: 0.27
+  version: 0
+resources:
+  license: http://dev.perl.org/licenses/
+version: v0.16.1
