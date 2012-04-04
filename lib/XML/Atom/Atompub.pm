@@ -60,7 +60,7 @@ unless (XML::Atom::Thing->can('alternate_link')) {
     };
 }
 
-for my $rel qw(self edit edit-media related enclosure via first previous next last) {
+for my $rel (qw(self edit edit-media related enclosure via first previous next last)) {
     no strict 'refs'; ## no critic
 
     my $method = join '_', $rel, 'link';

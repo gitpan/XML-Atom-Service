@@ -54,7 +54,7 @@ is $category[1]->scheme, 'http://example.org/extra-cats/';
 is $category[1]->term, 'serious';
 
 my $xml = $categories->as_xml;
-like $xml, qr!^<\?xml version="1.0" encoding="utf-8"\?>!;
+like $xml, qr!^<\?xml version="1.0" encoding="utf-8"\?>!i;
 
 like $xml, qr!<categories xmlns="http://www.w3.org/2007/app"!;
 like $xml, qr!fixed="yes"!;

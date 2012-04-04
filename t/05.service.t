@@ -31,7 +31,7 @@ is $workspace[0]->title, 'Foo Bar';
 is $workspace[1]->title, 'Baz Quux';
 
 my $xml = $service->as_xml;
-like $xml, qr!^<\?xml version="1.0" encoding="utf-8"\?>!;
+like $xml, qr!^<\?xml version="1.0" encoding="utf-8"\?>!i;
 
 my $ns_uri = $XML::Atom::Util::NS_MAP{ $XML::Atom::DefaultVersion };
 like $xml, qr!<service xmlns="http://www.w3.org/2007/app"(?: xmlns:atom="$ns_uri">)?!;

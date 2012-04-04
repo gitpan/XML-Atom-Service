@@ -22,3 +22,4 @@ t/pod.t
 t/samples/sample.atomcat
 t/samples/sample.atomsvc
 t/samples/sample.atom
+META.json

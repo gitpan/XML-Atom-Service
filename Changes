@@ -1,3 +1,9 @@
+2012-04-04  Takeru INOUE  <takeru.inoue _ gmail.com>
+
+	* release 0.16.1:
+	* t/02.categories.t and t/05.service.t
+	- fixed a bug on regexp
+
 2010-03-15  Takeru INOUE  <takeru.inoue _ gmail.com>
 
 	* release 0.16.1:
